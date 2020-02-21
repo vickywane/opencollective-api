@@ -3,6 +3,7 @@ import config from 'config';
 import GraphHTTP from 'express-graphql';
 import expressLimiter from 'express-limiter';
 import serverStatus from 'express-server-status';
+import expressWs from 'express-ws';
 import { get } from 'lodash';
 import multer from 'multer';
 import redis from 'redis';
@@ -15,6 +16,7 @@ import * as users from './controllers/users';
 import { stripeWebhook, transferwiseWebhook } from './controllers/webhooks';
 import graphqlSchemaV1 from './graphql/v1/schema';
 import graphqlSchemaV2 from './graphql/v2/schema';
+import hyperwatch from './lib/hyperwatch';
 import logger from './lib/logger';
 import * as authentication from './middleware/authentication';
 import errorHandler from './middleware/error_handler';
@@ -193,6 +195,14 @@ export default app => {
    * Hello Works API - Helloworks hits this endpoint when a document has been completed.
    */
   app.post('/helloworks/callback', helloworks.callback);
+
+  // We need to setup express-ws here to make Hyperwatch's websocket works
+  expressWs(app);
+
+  // Mount Hyperwatch API and Websocket
+  const hyperwatchPath = '/_hyperwatch';
+  app.use(hyperwatchPath, hyperwatch.apps.api);
+  app.use(hyperwatchPath, hyperwatch.apps.websocket);
 
   /**
    * Override default 404 handler to make sure to obfuscate api_key visible in URL
