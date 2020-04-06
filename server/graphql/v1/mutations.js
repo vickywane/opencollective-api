@@ -9,7 +9,6 @@ import {
   deleteCollective,
   deleteUserCollective,
   approveCollective,
-  createCollectiveFromGithub,
   archiveCollective,
   unarchiveCollective,
   sendMessageToCollective,
@@ -106,15 +105,6 @@ const mutations = {
     },
     resolve(_, args, req) {
       return createCollective(_, args, req);
-    },
-  },
-  createCollectiveFromGithub: {
-    type: CollectiveInterfaceType,
-    args: {
-      collective: { type: new GraphQLNonNull(CollectiveInputType) },
-    },
-    resolve(_, args, req) {
-      return createCollectiveFromGithub(_, args, req);
     },
   },
   editCollective: {
