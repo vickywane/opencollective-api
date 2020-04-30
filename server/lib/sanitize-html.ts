@@ -140,5 +140,15 @@ export const generateSummaryForHTML = (content, maxLength = 255) => {
   const truncated = truncate(trimmed, { length: maxLength });
 
   // Second sanitize pass: an additional precaution in case someones finds a way to play with the trimmed version
-  return sanitizeHTML(truncated, optsSanitizeSummary);
+  const secondSanitized = sanitizeHTML(truncated, optsSanitizeSummary);
+
+  const isTruncated = trimmed.length > maxLength;
+  const fullySanitized = sanitizeHTML(secondSanitized);
+
+  // Check to see if the second sanitization cuts a html tag in the middle
+  if (isTruncated && fullySanitized.substring(fullySanitized.length - 3, fullySanitized.length) !== '...') {
+    return `${secondSanitized.trim()}...`;
+  } else {
+    return secondSanitized;
+  }
 };

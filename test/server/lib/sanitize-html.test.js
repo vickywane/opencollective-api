@@ -150,5 +150,9 @@ describe('server/lib/sanitize-html', () => {
         'Mene ergo et Triarium · Lorem ipsum dolor.',
       );
     });
+
+    it('Truncating tags in middle works as expected', () => {
+      expect(generateSummaryForHTML("I'd like to say <strong>Hello World</strong>", 20)).to.to.eq("I'd like to say...");
+    });
   });
 });
