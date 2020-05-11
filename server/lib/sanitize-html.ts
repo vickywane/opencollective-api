@@ -146,7 +146,7 @@ export const generateSummaryForHTML = (content, maxLength = 255) => {
   const fullySanitized = sanitizeHTML(secondSanitized);
 
   // Check to see if the second sanitization cuts a html tag in the middle
-  if (isTruncated && fullySanitized.substring(fullySanitized.length - 3, fullySanitized.length) !== '...') {
+  if (isTruncated && fullySanitized.slice(fullySanitized.length - 3) !== '...') {
     return `${secondSanitized.trim()}...`;
   } else {
     return secondSanitized;
