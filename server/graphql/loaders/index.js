@@ -10,6 +10,7 @@ import models, { Op, sequelize } from '../../models';
 
 import collectiveLoaders from './collective';
 import commentsLoader from './comments';
+import commentReactionLoader from './comment-reaction';
 import conversationLoaders from './conversation';
 import * as expenseLoaders from './expenses';
 import { createDataLoaderWithOptions, sortResults } from './helpers';
@@ -23,6 +24,9 @@ export const loaders = req => {
   // Comment
   context.loaders.Comment.findAllByAttribute = commentsLoader.findAllByAttribute(req, cache);
   context.loaders.Comment.countByExpenseId = commentsLoader.countByExpenseId(req, cache);
+
+  // Comment Reactions
+  context.loaders.CommentReaction.findAllByCommentId = commentReactionLoader.generateCommentReactionsLoader(req, cache);
 
   // Conversation
   context.loaders.Conversation.followers = conversationLoaders.followers(req, cache);
